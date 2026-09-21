@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   } satisfies ViewStyle,
   unitLabel: {
-    ...typography.bodySm,
+    ...typography.label,
     color: colors.textSecondary,
   } satisfies TextStyle,
   unitRow: {
@@ -143,21 +143,21 @@ const styles = StyleSheet.create({
   unitButton: {
     flex: 1,
     height: touchTarget.min,
-    borderRadius: radius.button,
+    borderRadius: radius.md,
     borderWidth: 1.5,
-    borderColor: colors.border,
+    borderColor: colors.surfaceMuted,
     alignItems: 'center',
     justifyContent: 'center',
   } satisfies ViewStyle,
   unitButtonActive: {
-    borderColor: colors.accent,
-    backgroundColor: colors.accentMuted,
+    borderColor: colors.textPrimary,
+    backgroundColor: colors.surfaceElevated,
   } satisfies ViewStyle,
   unitButtonText: {
-    ...typography.subtitle,
+    ...typography.heading,
     color: colors.textSecondary,
   } satisfies TextStyle,
   unitButtonTextActive: {
-    color: colors.accent,
+    color: colors.textPrimary,
   } satisfies TextStyle,
 });

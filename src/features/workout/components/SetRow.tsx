@@ -79,7 +79,7 @@ export function SetRow({
         </View>
 
         <IconButton
-          icon={<Trash2 size={16} color={colors.textTertiary} />}
+          icon={<Trash2 size={16} color={colors.surfaceMuted} />}
           onPress={onDelete}
           testID={`${testID}-delete`}
         />
@@ -90,15 +90,12 @@ export function SetRow({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.card,
+    backgroundColor: colors.surfaceElevated,
+    borderRadius: radius.lg,
     padding: spacing.base,
-    borderWidth: 1,
-    borderColor: colors.border,
   } satisfies ViewStyle,
   warmupContainer: {
     opacity: 0.7,
-    borderStyle: 'dashed',
   } satisfies ViewStyle,
   header: {
     flexDirection: 'row',
@@ -108,8 +105,8 @@ const styles = StyleSheet.create({
   setLabel: {
     width: 32,
     height: 32,
-    borderRadius: radius.pill,
-    backgroundColor: colors.surfaceElevated,
+    borderRadius: radius.full,
+    backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'center',
   } satisfies ViewStyle,
@@ -117,6 +114,7 @@ const styles = StyleSheet.create({
     ...typography.caption,
     color: colors.textPrimary,
     fontWeight: '700',
+    fontFamily: 'Poppins-Bold',
     ...numericStyle,
   } satisfies TextStyle,
   warmupText: {

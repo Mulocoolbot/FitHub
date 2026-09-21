@@ -1,24 +1,23 @@
 import React from 'react';
 import { View, StyleSheet, type ViewStyle } from 'react-native';
-import { colors, spacing, radius, shadows } from '../tokens';
+import { colors, spacing, radius } from '../tokens';
 
 interface CardProps {
   children: React.ReactNode;
-  elevated?: boolean;
   style?: ViewStyle;
   testID?: string;
 }
 
-export function Card({ children, elevated = false, style, testID }: CardProps) {
+/**
+ * Card component for content that contains text.
+ * Uses surfaceElevated (#3A3E43) per spec Bagian 9.2 — contrast >11:1 vs white text.
+ * No drop shadows per spec Bagian 9.1.
+ */
+export function Card({ children, style, testID }: CardProps) {
   return (
     <View
       testID={testID}
-      style={[
-        styles.card,
-        elevated && styles.elevated,
-        elevated ? shadows.elevated : shadows.card,
-        style,
-      ]}
+      style={[styles.card, style]}
     >
       {children}
     </View>
@@ -27,13 +26,8 @@ export function Card({ children, elevated = false, style, testID }: CardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.card,
-    padding: spacing.base,
-    borderWidth: 1,
-    borderColor: colors.border,
-  } satisfies ViewStyle,
-  elevated: {
     backgroundColor: colors.surfaceElevated,
+    borderRadius: radius.lg,
+    padding: spacing.base,
   } satisfies ViewStyle,
 });

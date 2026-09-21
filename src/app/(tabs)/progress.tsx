@@ -10,7 +10,7 @@ export default function ProgressScreen() {
         <Text style={styles.title}>Progress</Text>
       </View>
       <View style={styles.empty}>
-        <BarChart3 size={48} color={colors.textTertiary} />
+        <BarChart3 size={48} color={colors.surfaceMuted} />
         <Text style={styles.emptyTitle}>Track your gains</Text>
         <Text style={styles.emptySubtitle}>
           Complete a few workouts to see your progress trends
@@ -42,12 +42,12 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xxl * 2,
   } satisfies ViewStyle,
   emptyTitle: {
-    ...typography.subtitle,
+    ...typography.heading,
     color: colors.textSecondary,
   } satisfies TextStyle,
   emptySubtitle: {
-    ...typography.bodySm,
-    color: colors.textTertiary,
+    ...typography.label,
+    color: colors.surfaceMuted,
     textAlign: 'center',
     paddingHorizontal: spacing.xxl,
   } satisfies TextStyle,

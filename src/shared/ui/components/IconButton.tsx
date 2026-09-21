@@ -58,14 +58,12 @@ const styles = StyleSheet.create({
   base: {
     width: touchTarget.min,
     height: touchTarget.min,
-    borderRadius: radius.card,
+    borderRadius: radius.sm,
     alignItems: 'center',
     justifyContent: 'center',
   } satisfies ViewStyle,
   surface: {
     backgroundColor: colors.surfaceElevated,
-    borderWidth: 1,
-    borderColor: colors.border,
   } satisfies ViewStyle,
   disabled: {
     opacity: 0.4,

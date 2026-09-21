@@ -111,10 +111,8 @@ const styles = StyleSheet.create({
   button: {
     width: touchTarget.min,
     height: touchTarget.min,
-    borderRadius: radius.card,
+    borderRadius: radius.sm,
     backgroundColor: colors.surfaceElevated,
-    borderWidth: 1,
-    borderColor: colors.border,
     alignItems: 'center',
     justifyContent: 'center',
   } satisfies ViewStyle,
@@ -133,7 +131,7 @@ const styles = StyleSheet.create({
     ...numericStyle,
   } satisfies TextStyle,
   unit: {
-    ...typography.bodySm,
+    ...typography.label,
     color: colors.textSecondary,
     marginLeft: spacing.xs,
   } satisfies TextStyle,

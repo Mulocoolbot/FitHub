@@ -185,7 +185,7 @@ export function OtpScreen() {
               keyboardType="number-pad"
               maxLength={index === 0 ? OTP_LENGTH : 1}
               selectTextOnFocus
-              selectionColor={colors.accent}
+              selectionColor={colors.textPrimary}
               testID={`otp-input-${index}`}
             />
           ))}
@@ -256,23 +256,22 @@ const styles = StyleSheet.create({
   codeInput: {
     width: 48,
     height: 56,
-    borderRadius: radius.input,
+    borderRadius: radius.sm,
     borderWidth: 1.5,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
+    borderColor: colors.surfaceMuted,
+    backgroundColor: colors.surfaceElevated,
     ...typography.title,
     color: colors.textPrimary,
     textAlign: 'center',
   } satisfies TextStyle,
   codeInputFilled: {
-    borderColor: colors.accent,
-    backgroundColor: colors.accentMuted,
+    borderColor: colors.textPrimary,
   } satisfies ViewStyle,
   codeInputError: {
     borderColor: colors.error,
   } satisfies ViewStyle,
   error: {
-    ...typography.bodySm,
+    ...typography.label,
     color: colors.error,
     textAlign: 'center',
     marginTop: spacing.base,
@@ -283,12 +282,12 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xl,
   } satisfies ViewStyle,
   resendTimer: {
-    ...typography.bodySm,
-    color: colors.textTertiary,
+    ...typography.label,
+    color: colors.surfaceMuted,
   } satisfies TextStyle,
   resendLink: {
-    ...typography.bodySm,
-    color: colors.accent,
+    ...typography.label,
+    color: colors.textPrimary,
     fontWeight: '600',
   } satisfies TextStyle,
 });

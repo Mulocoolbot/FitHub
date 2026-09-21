@@ -1,45 +1,49 @@
+/**
+ * Auth Repository
+ *
+ * Three separate login methods (spec Bagian 8.1):
+ * 1. Google — native sign-in via @react-native-google-signin, no OTP
+ * 2. Email — OTP 6-digit via email
+ * 3. Phone — OTP 6-digit via SMS/WhatsApp (dev mode: logged to console)
+ *
+ * Google Sign-In uses native module (not browser redirect) per spec Bagian 8.2.
+ * Requires development build, NOT Expo Go.
+ */
 import { supabase } from '../../../shared/lib/supabase';
 import { Platform } from 'react-native';
-import * as AuthSession from 'expo-auth-session';
-import * as WebBrowser from 'expo-web-browser';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 
-WebBrowser.maybeCompleteAuthSession();
-
-const redirectUri = AuthSession.makeRedirectUri({
-  scheme: process.env.EXPO_PUBLIC_APP_SCHEME ?? 'fithub',
+// Configure Google Sign-In with Web client ID (used for ID token verification)
+GoogleSignin.configure({
+  webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID_WEB ?? '',
+  iosClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID_IOS ?? '',
+  offlineAccess: true,
 });
 
 /**
- * Sign in with Google OAuth.
- * No OTP needed — Google already verifies identity.
+ * Sign in with Google OAuth (native, not browser redirect).
+ *
+ * Flow: native Google dialog → ID token + nonce → supabase.auth.signInWithIdToken()
+ * User never leaves the app.
  */
 export async function signInWithGoogle() {
-  const { data, error } = await supabase.auth.signInWithOAuth({
+  await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+  const response = await GoogleSignin.signIn();
+
+  if (!response.data?.idToken) {
+    throw new Error('Google Sign-In failed: no ID token returned');
+  }
+
+  const { data, error } = await supabase.auth.signInWithIdToken({
     provider: 'google',
-    options: {
-      redirectTo: redirectUri,
-      skipBrowserRedirect: true,
-    },
+    token: response.data.idToken,
   });
 
   if (error) throw error;
-  if (data.url) {
-    const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUri);
-    if (result.type === 'success') {
-      const url = new URL(result.url);
-      const params = new URLSearchParams(url.hash.substring(1));
-      const accessToken = params.get('access_token');
-      const refreshToken = params.get('refresh_token');
-
-      if (accessToken && refreshToken) {
-        const { error: sessionError } = await supabase.auth.setSession({
-          access_token: accessToken,
-          refresh_token: refreshToken,
-        });
-        if (sessionError) throw sessionError;
-      }
-    }
-  }
+  return data;
 }
 
 /**
@@ -99,6 +103,12 @@ export async function verifyPhoneOtp(phone: string, token: string) {
  * Sign out the current user.
  */
 export async function signOut() {
+  // Also sign out from Google to allow account switching
+  try {
+    await GoogleSignin.signOut();
+  } catch {
+    // Ignore — user may not have signed in with Google
+  }
   const { error } = await supabase.auth.signOut();
   if (error) throw error;
 }
@@ -131,7 +141,7 @@ export async function getProfile(userId: string) {
 export async function updateProfile(
   userId: string,
   updates: {
-    display_name?: string;
+    display_name?: string | null;
     unit_pref?: 'kg' | 'lb';
     timezone?: string;
   },

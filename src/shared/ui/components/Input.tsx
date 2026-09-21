@@ -19,17 +19,19 @@ interface InputProps extends Omit<TextInputProps, 'style'> {
   label?: string;
   error?: string;
   icon?: React.ReactNode;
+  leftIcon?: React.ReactNode;
   testID?: string;
 }
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
-export function Input({ label, error, icon, testID, ...rest }: InputProps) {
+export function Input({ label, error, icon, leftIcon, testID, ...rest }: InputProps) {
+  const resolvedIcon = icon ?? leftIcon;
   const [focused, setFocused] = useState(false);
   const borderProgress = useSharedValue(0);
 
   const animatedBorder = useAnimatedStyle(() => ({
-    borderColor: borderProgress.value === 1 ? colors.borderFocused : colors.border,
+    borderColor: borderProgress.value === 1 ? colors.textPrimary : colors.surfaceMuted,
   }));
 
   const handleFocus = () => {
@@ -52,12 +54,12 @@ export function Input({ label, error, icon, testID, ...rest }: InputProps) {
           animatedBorder,
         ]}
       >
-        {icon != null && <View style={styles.iconWrapper}>{icon}</View>}
+        {resolvedIcon != null && <View style={styles.iconWrapper}>{resolvedIcon}</View>}
         <TextInput
           testID={testID}
-          style={[styles.input, icon != null && styles.inputWithIcon]}
-          placeholderTextColor={colors.textTertiary}
-          selectionColor={colors.accent}
+          style={[styles.input, resolvedIcon != null && styles.inputWithIcon]}
+          placeholderTextColor={colors.surfaceMuted}
+          selectionColor={colors.textPrimary}
           onFocus={handleFocus}
           onBlur={handleBlur}
           {...rest}
@@ -73,17 +75,17 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   } satisfies ViewStyle,
   label: {
-    ...typography.bodySm,
+    ...typography.label,
     color: colors.textSecondary,
     marginBottom: spacing.xs,
   } satisfies TextStyle,
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surfaceElevated,
     borderWidth: 1.5,
-    borderColor: colors.border,
-    borderRadius: radius.input,
+    borderColor: colors.surfaceMuted,
+    borderRadius: radius.sm,
     paddingHorizontal: spacing.base,
   } satisfies ViewStyle,
   inputError: {

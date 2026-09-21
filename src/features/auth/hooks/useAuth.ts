@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '../../../shared/lib/supabase';
+import { signOut as authSignOut } from '../api/auth';
 import type { Session, User } from '@supabase/supabase-js';
 
 interface AuthState {
@@ -51,7 +52,7 @@ export function useAuth() {
 
   const signOut = useCallback(async () => {
     setState((prev) => ({ ...prev, loading: true }));
-    await supabase.auth.signOut();
+    await authSignOut();
     setState({
       session: null,
       user: null,

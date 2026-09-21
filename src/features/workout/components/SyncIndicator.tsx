@@ -18,8 +18,8 @@ export function SyncIndicator({ isSynced, pendingCount = 0 }: SyncIndicatorProps
         </>
       ) : (
         <>
-          <CloudOff size={14} color={colors.statusFlat} />
-          <Text style={[styles.text, { color: colors.statusFlat }]}>
+          <CloudOff size={14} color={colors.statusMixed} />
+          <Text style={[styles.text, { color: colors.statusMixed }]}>
             Local{pendingCount > 0 ? ` (${pendingCount} pending)` : ''}
           </Text>
         </>

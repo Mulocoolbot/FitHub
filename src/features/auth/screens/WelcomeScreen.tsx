@@ -8,7 +8,7 @@ import {
   type TextStyle,
 } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Mail, Phone, Chrome } from 'lucide-react-native';
+import { Mail, Phone, LogIn } from 'lucide-react-native';
 import { Button } from '../../../shared/ui/components';
 import { colors, typography, spacing, iconDefaults } from '../../../shared/ui/tokens';
 import { signInWithGoogle } from '../api/auth';
@@ -50,7 +50,7 @@ export function WelcomeScreen() {
             fullWidth
             loading={loading}
             icon={
-              <Chrome
+              <LogIn
                 size={iconDefaults.size}
                 strokeWidth={iconDefaults.strokeWidth}
                 color={colors.textPrimary}
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     ...typography.display,
     fontSize: 48,
     lineHeight: 56,
-    color: colors.accent,
+    color: colors.textPrimary,
     letterSpacing: -1,
   } satisfies TextStyle,
   tagline: {

@@ -7,9 +7,9 @@ import {
   type ViewStyle,
   type TextStyle,
 } from 'react-native';
-import { User, LogOut, Settings } from 'lucide-react-native';
+import { User, LogOut } from 'lucide-react-native';
 import { Button, Card } from '../../shared/ui/components';
-import { colors, typography, spacing, iconDefaults } from '../../shared/ui/tokens';
+import { colors, typography, spacing, radius, iconDefaults } from '../../shared/ui/tokens';
 import { useAuth } from '../../features/auth/hooks/useAuth';
 
 export default function ProfileScreen() {
@@ -78,8 +78,8 @@ const styles = StyleSheet.create({
   avatar: {
     width: 56,
     height: 56,
-    borderRadius: 28,
-    backgroundColor: colors.surfaceElevated,
+    borderRadius: radius.full,
+    backgroundColor: colors.surfaceMuted,
     alignItems: 'center',
     justifyContent: 'center',
   } satisfies ViewStyle,
@@ -87,11 +87,11 @@ const styles = StyleSheet.create({
     flex: 1,
   } satisfies ViewStyle,
   profileName: {
-    ...typography.subtitle,
+    ...typography.heading,
     color: colors.textPrimary,
   } satisfies TextStyle,
   profileEmail: {
-    ...typography.bodySm,
+    ...typography.label,
     color: colors.textSecondary,
     marginTop: spacing.xs,
   } satisfies TextStyle,

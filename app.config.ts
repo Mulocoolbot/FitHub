@@ -9,12 +9,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   icon: './assets/icon.png',
   userInterfaceStyle: 'dark',
   scheme: process.env.EXPO_PUBLIC_APP_SCHEME ?? 'fithub',
-  splash: {
-    backgroundColor: '#0A0A0F',
-  },
   ios: {
     supportsTablet: false,
-    bundleIdentifier: 'com.fithub.app',
+    bundleIdentifier: 'com.mullo.fithub',
     config: {
       usesNonExemptEncryption: false,
     },
@@ -24,19 +21,25 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       foregroundImage: './assets/android-icon-foreground.png',
       backgroundImage: './assets/android-icon-background.png',
       monochromeImage: './assets/android-icon-monochrome.png',
-      backgroundColor: '#0A0A0F',
+      backgroundColor: '#2F3337',
     },
-    package: 'com.fithub.app',
+    package: 'com.mullo.fithub',
   },
   plugins: [
     'expo-router',
     'expo-secure-store',
     'expo-font',
-    'expo-splash-screen',
     [
-      'expo-web-browser',
+      'expo-splash-screen',
       {
-        experimentalLaunchInBrowser: true,
+        backgroundColor: '#2F3337',
+      },
+    ],
+    'expo-crypto',
+    [
+      '@react-native-google-signin/google-signin',
+      {
+        iosUrlScheme: `com.googleusercontent.apps.${(process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID_IOS ?? '').split('.')[0]}`,
       },
     ],
   ],

@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Dumbbell, BarChart3, User } from 'lucide-react-native';
+import { Dumbbell, ListFilter, BarChart3, User } from 'lucide-react-native';
 import { colors, typography, iconDefaults } from '../../shared/ui/tokens';
 
 export default function TabLayout() {
@@ -8,15 +8,15 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: colors.surface,
-          borderTopColor: colors.border,
-          borderTopWidth: 1,
+          backgroundColor: colors.surfaceElevated,
+          borderTopColor: colors.surfaceMuted,
+          borderTopWidth: 0.5,
           height: 84,
           paddingBottom: 24,
           paddingTop: 8,
         },
-        tabBarActiveTintColor: colors.accent,
-        tabBarInactiveTintColor: colors.textTertiary,
+        tabBarActiveTintColor: colors.textPrimary,
+        tabBarInactiveTintColor: colors.surfaceMuted,
         tabBarLabelStyle: {
           ...typography.caption,
           fontSize: 11,
@@ -29,6 +29,15 @@ export default function TabLayout() {
           title: 'Workouts',
           tabBarIcon: ({ color }) => (
             <Dumbbell size={iconDefaults.size} color={color} strokeWidth={iconDefaults.strokeWidth} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="exercises"
+        options={{
+          title: 'Exercises',
+          tabBarIcon: ({ color }) => (
+            <ListFilter size={iconDefaults.size} color={color} strokeWidth={iconDefaults.strokeWidth} />
           ),
         }}
       />

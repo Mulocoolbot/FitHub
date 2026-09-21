@@ -54,12 +54,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
-    borderRadius: radius.pill,
+    borderRadius: radius.full,
     gap: spacing.xs,
     alignSelf: 'flex-start',
   } satisfies ViewStyle,
   label: {
     ...typography.caption,
     fontWeight: '600',
+    fontFamily: 'Poppins-SemiBold',
   } satisfies TextStyle,
 });

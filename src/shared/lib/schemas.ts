@@ -6,8 +6,9 @@ import { z } from 'zod';
 
 // ─── Enums ───────────────────────────────────────────────────────────────────
 export const UnitPreferenceSchema = z.enum(['kg', 'lb']);
-export const MuscleGroupSchema = z.enum(['chest', 'back', 'legs', 'shoulders', 'arms', 'core']);
-export const EquipmentSchema = z.enum(['barbell', 'dumbbell', 'machine', 'cable', 'bodyweight']);
+export const MuscleGroupRegionSchema = z.enum([
+  'chest', 'back', 'shoulders', 'arms', 'legs', 'core', 'other',
+]);
 export const ProgressStatusSchema = z.enum(['up', 'down', 'flat', 'mixed', 'new']);
 export const ProgressPeriodSchema = z.enum(['day', 'week', 'month']);
 
@@ -20,13 +21,23 @@ export const ProfileSchema = z.object({
   created_at: z.string(),
 });
 
+export const MuscleGroupRowSchema = z.object({
+  id: z.string().uuid(),
+  slug: z.string(),
+  name: z.string(),
+  region: MuscleGroupRegionSchema,
+  sort_order: z.number().int(),
+});
+
 export const ExerciseSchema = z.object({
   id: z.string().uuid(),
+  owner_id: z.string().uuid(),
   name: z.string(),
-  muscle_group: MuscleGroupSchema,
-  equipment: EquipmentSchema.nullable(),
-  parent_id: z.string().uuid().nullable(),
-  owner_id: z.string().uuid().nullable(),
+  muscle_group_id: z.string().uuid(),
+  secondary_group_ids: z.array(z.string().uuid()).default([]),
+  equipment: z.string().nullable(),
+  note: z.string().nullable(),
+  archived_at: z.string().nullable(),
   created_at: z.string(),
 });
 
@@ -70,7 +81,7 @@ export const WorkoutSessionFullSchema = WorkoutSessionSchema.extend({
 export const ExerciseProgressSchema = z.object({
   exercise_id: z.string().uuid(),
   exercise_name: z.string(),
-  muscle_group: MuscleGroupSchema,
+  muscle_group_id: z.string().uuid(),
   period_label: z.string(),
   current_best_e1rm: z.number(),
   previous_best_e1rm: z.number().nullable(),
@@ -92,4 +103,11 @@ export const SetInputSchema = z.object({
 export const SessionInputSchema = z.object({
   performed_at: z.string(),
   note: z.string().optional(),
+});
+
+export const ExerciseInputSchema = z.object({
+  name: z.string().min(1).max(200),
+  muscle_group_id: z.string().uuid(),
+  equipment: z.string().max(100).optional(),
+  note: z.string().max(500).optional(),
 });

@@ -104,27 +104,24 @@ export function Sheet({
 
 const styles = StyleSheet.create({
   wrapper: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     justifyContent: 'flex-end',
     zIndex: 100,
   } satisfies ViewStyle,
   overlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: colors.overlay,
   } satisfies ViewStyle,
   sheet: {
-    backgroundColor: colors.surface,
-    borderTopLeftRadius: radius.sheet,
-    borderTopRightRadius: radius.sheet,
-    borderWidth: 1,
-    borderBottomWidth: 0,
-    borderColor: colors.border,
+    backgroundColor: colors.surfaceElevated,
+    borderTopLeftRadius: radius.xl,
+    borderTopRightRadius: radius.xl,
   } satisfies ViewStyle,
   handle: {
     width: 36,
     height: 4,
     borderRadius: 2,
-    backgroundColor: colors.textTertiary,
+    backgroundColor: colors.surfaceMuted,
     alignSelf: 'center',
     marginTop: spacing.sm,
   } satisfies ViewStyle,

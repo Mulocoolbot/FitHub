@@ -4,6 +4,9 @@
 -- All weights stored in kilograms; conversion to lbs in presentation layer only.
 -- ============================================================================
 
+-- ─── Extensions ──────────────────────────────────────────────────────────────
+create extension if not exists "pg_trgm";
+
 -- ─── Profiles ────────────────────────────────────────────────────────────────
 create table public.profiles (
   id          uuid primary key references auth.users(id) on delete cascade,
@@ -16,21 +19,36 @@ create table public.profiles (
 
 comment on table public.profiles is 'User profile data, linked 1:1 to auth.users';
 
--- ─── Exercises ───────────────────────────────────────────────────────────────
-create table public.exercises (
+-- ─── Muscle Groups (system reference, read-only for users) ──────────────────
+create table public.muscle_groups (
   id          uuid primary key default gen_random_uuid(),
+  slug        text unique not null,
   name        text not null,
-  muscle_group text not null
-              check (muscle_group in ('chest', 'back', 'legs', 'shoulders', 'arms', 'core')),
-  equipment   text
-              check (equipment is null or equipment in ('barbell', 'dumbbell', 'machine', 'cable', 'bodyweight')),
-  parent_id   uuid references public.exercises(id) on delete set null,
-  owner_id    uuid references auth.users(id) on delete cascade,
-  created_at  timestamptz not null default now()
+  region      text not null
+              check (region in ('chest', 'back', 'shoulders', 'arms', 'legs', 'core', 'other')),
+  sort_order  int not null
 );
 
-comment on table public.exercises is 'Exercise catalog. owner_id = null means built-in; non-null means user-created';
-comment on column public.exercises.parent_id is 'Variation hierarchy: parent = Bench Press, child = Incline DB Press';
+comment on table public.muscle_groups is 'System reference table for muscle groups. Modified only via migrations.';
+
+-- ─── Exercises (ALL user-created, no built-in catalog) ──────────────────────
+create table public.exercises (
+  id                  uuid primary key default gen_random_uuid(),
+  owner_id            uuid not null references auth.users(id) on delete cascade,
+  name                text not null,
+  muscle_group_id     uuid not null references public.muscle_groups(id),
+  secondary_group_ids uuid[] default '{}',
+  equipment           text,
+  note                text,
+  archived_at         timestamptz,
+  created_at          timestamptz not null default now()
+);
+
+comment on table public.exercises is 'Exercise library. Every exercise belongs to a user (owner_id). No built-in catalog.';
+
+-- Case-insensitive unique constraint per user
+create unique index uniq_exercise_name_per_user
+  on public.exercises (owner_id, lower(trim(name)));
 
 -- ─── Workout Sessions ───────────────────────────────────────────────────────
 create table public.workout_sessions (
@@ -68,11 +86,24 @@ create table public.exercise_sets (
 comment on table public.exercise_sets is 'Individual sets within an exercise in a session';
 
 -- ─── Indexes ─────────────────────────────────────────────────────────────────
-create index idx_workout_sessions_user_date on public.workout_sessions (user_id, performed_at desc);
-create index idx_session_exercises_session  on public.session_exercises (session_id);
-create index idx_exercise_sets_session_ex   on public.exercise_sets (session_exercise_id);
-create index idx_exercises_owner            on public.exercises (owner_id);
-create index idx_exercises_muscle_group     on public.exercises (muscle_group);
+create index idx_workout_sessions_user_date
+  on public.workout_sessions (user_id, performed_at desc);
+
+create index idx_session_exercises_session
+  on public.session_exercises (session_id);
+
+create index idx_exercise_sets_session_ex
+  on public.exercise_sets (session_exercise_id);
+
+create index idx_exercises_owner_active
+  on public.exercises (owner_id) where archived_at is null;
+
+create index idx_exercises_muscle_group
+  on public.exercises (muscle_group_id);
+
+-- GIN trigram index for fuzzy duplicate detection
+create index idx_exercises_name_trgm
+  on public.exercises using gin (lower(name) gin_trgm_ops);
 
 -- ─── Auto-create profile on sign-up ─────────────────────────────────────────
 create or replace function public.handle_new_user()

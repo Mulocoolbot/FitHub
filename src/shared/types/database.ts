@@ -5,9 +5,14 @@
 
 export type UnitPreference = 'kg' | 'lb';
 
-export type MuscleGroup = 'chest' | 'back' | 'legs' | 'shoulders' | 'arms' | 'core';
-
-export type Equipment = 'barbell' | 'dumbbell' | 'machine' | 'cable' | 'bodyweight';
+export type MuscleGroupRegion =
+  | 'chest'
+  | 'back'
+  | 'shoulders'
+  | 'arms'
+  | 'legs'
+  | 'core'
+  | 'other';
 
 export type ProgressStatus = 'up' | 'down' | 'flat' | 'mixed' | 'new';
 
@@ -21,13 +26,23 @@ export interface Profile {
   created_at: string;
 }
 
+export interface MuscleGroupRow {
+  id: string;
+  slug: string;
+  name: string;
+  region: MuscleGroupRegion;
+  sort_order: number;
+}
+
 export interface Exercise {
   id: string;
+  owner_id: string;
   name: string;
-  muscle_group: MuscleGroup;
-  equipment: Equipment | null;
-  parent_id: string | null;
-  owner_id: string | null;
+  muscle_group_id: string;
+  secondary_group_ids: string[];
+  equipment: string | null;
+  note: string | null;
+  archived_at: string | null;
   created_at: string;
 }
 
@@ -71,7 +86,7 @@ export interface WorkoutSessionFull extends WorkoutSession {
 export interface ExerciseProgress {
   exercise_id: string;
   exercise_name: string;
-  muscle_group: MuscleGroup;
+  muscle_group_id: string;
   period_label: string;
   current_best_e1rm: number;
   previous_best_e1rm: number | null;

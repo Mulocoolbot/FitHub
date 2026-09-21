@@ -6,6 +6,7 @@
 
 -- ─── Enable RLS ──────────────────────────────────────────────────────────────
 alter table public.profiles         enable row level security;
+alter table public.muscle_groups    enable row level security;
 alter table public.exercises        enable row level security;
 alter table public.workout_sessions enable row level security;
 alter table public.session_exercises enable row level security;
@@ -27,13 +28,18 @@ create policy "profiles_insert_own"
   on public.profiles for insert
   with check (auth.uid() = id);
 
--- ─── Exercises ───────────────────────────────────────────────────────────────
--- Select: built-in exercises (owner_id is null) OR user's own custom exercises
-create policy "exercises_select_catalog_and_own"
-  on public.exercises for select
-  using (owner_id is null or owner_id = auth.uid());
+-- ─── Muscle Groups (system reference, read-only) ────────────────────────────
+-- All authenticated users can read; no insert/update/delete policies
+create policy "muscle_groups_select_authenticated"
+  on public.muscle_groups for select
+  using (auth.role() = 'authenticated');
 
--- Insert/Update/Delete: only user's own custom exercises
+-- ─── Exercises ───────────────────────────────────────────────────────────────
+-- All operations restricted to owner. No built-in exercises (no owner_id is null exception).
+create policy "exercises_select_own"
+  on public.exercises for select
+  using (owner_id = auth.uid());
+
 create policy "exercises_insert_own"
   on public.exercises for insert
   with check (owner_id = auth.uid());

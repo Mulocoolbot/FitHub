@@ -35,19 +35,41 @@ cp .env.example .env
 # Fill in your Supabase URL, anon key, and OAuth credentials
 ```
 
-### 3. Database
+### 3. Database Migrations
+
+Apply the migration files to your Supabase project:
 
 ```bash
 npx supabase login
-npx supabase link --project-ref <your-project-ref>
+npx supabase link --project-ref whiwnmcoqotfxpulcnbi
 npx supabase db push
 ```
 
-### 4. Run
+Alternatively, paste the contents of `supabase/migrations/*.sql` in order (00001 to 00004) in the Supabase Dashboard SQL Editor.
+
+### 4. Run Development Build
+
+> ⚠️ **IMPORTANT:** Google Sign-In uses native module (`@react-native-google-signin/google-signin`), which requires a development build rather than Expo Go.
 
 ```bash
-npx expo start
-# Press 'i' for iOS simulator or 'a' for Android emulator
+# iOS Simulator:
+npx expo run:ios
+
+# Android Emulator:
+npx expo run:android
+
+# Or start the Metro bundler:
+npx expo start --dev-client
+```
+
+### 5. Verify RLS Policies & TypeScript
+
+```bash
+# TypeScript strict type check:
+npx tsc --noEmit
+
+# Test RLS isolation:
+node scripts/test-rls.js
 ```
 
 ## Project Structure

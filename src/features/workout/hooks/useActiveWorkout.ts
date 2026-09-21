@@ -20,7 +20,7 @@ interface ActiveExercise {
   id?: string;
   exercise_id: string;
   exercise_name: string;
-  muscle_group: string;
+  muscle_group_id: string;
   position: number;
   sets: ActiveSet[];
 }
@@ -40,7 +40,7 @@ interface ActiveWorkoutState {
   addExercise: (exercise: {
     exercise_id: string;
     exercise_name: string;
-    muscle_group: string;
+    muscle_group_id: string;
   }) => void;
   removeExercise: (position: number) => void;
   addSet: (exercisePosition: number, set: Omit<ActiveSet, 'set_no'>) => void;

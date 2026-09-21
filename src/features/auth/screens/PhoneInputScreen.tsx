@@ -31,7 +31,7 @@ export function PhoneInputScreen() {
     const cleaned = phone.replace(/[\s-]/g, '');
     const result = phoneSchema.safeParse(cleaned);
     if (!result.success) {
-      setError(result.error.errors[0].message);
+      setError(result.error.issues[0].message);
       return;
     }
 

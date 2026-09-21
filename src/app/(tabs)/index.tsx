@@ -16,7 +16,7 @@ import { Plus, ChevronRight, Clock, Dumbbell } from 'lucide-react-native';
 import { format } from 'date-fns';
 import { Button, Card } from '../../shared/ui/components';
 import { SyncIndicator } from '../../features/workout/components/SyncIndicator';
-import { colors, typography, spacing, radius, numericStyle, iconDefaults } from '../../shared/ui/tokens';
+import { colors, typography, spacing, numericStyle, iconDefaults } from '../../shared/ui/tokens';
 import { useAuth } from '../../features/auth/hooks/useAuth';
 import { useActiveWorkout } from '../../features/workout/hooks/useActiveWorkout';
 import { getSessions } from '../../features/workout/api/workoutRepository';
@@ -63,7 +63,7 @@ export default function HomeScreen() {
               </View>
               <ChevronRight
                 size={20}
-                color={colors.textTertiary}
+                color={colors.surfaceMuted}
                 strokeWidth={iconDefaults.strokeWidth}
               />
             </View>
@@ -92,7 +92,7 @@ export default function HomeScreen() {
           onPress={handleStartWorkout}
           variant="primary"
           icon={
-            <Plus size={18} color={colors.textInverse} strokeWidth={2.5} />
+            <Plus size={18} color={colors.accent} strokeWidth={2.5} />
           }
         />
       </View>
@@ -105,7 +105,7 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Dumbbell size={48} color={colors.textTertiary} />
+            <Dumbbell size={48} color={colors.surfaceMuted} />
             <Text style={styles.emptyTitle}>No workouts yet</Text>
             <Text style={styles.emptySubtitle}>
               Start your first session to begin tracking
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   } satisfies ViewStyle,
   sessionDate: {
-    ...typography.subtitle,
+    ...typography.heading,
     color: colors.textPrimary,
   } satisfies TextStyle,
   sessionMeta: {
@@ -158,12 +158,12 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   } satisfies ViewStyle,
   sessionDuration: {
-    ...typography.bodySm,
+    ...typography.label,
     color: colors.textSecondary,
     ...numericStyle,
   } satisfies TextStyle,
   sessionNote: {
-    ...typography.bodySm,
+    ...typography.label,
     color: colors.textSecondary,
     marginTop: spacing.sm,
   } satisfies TextStyle,
@@ -173,12 +173,12 @@ const styles = StyleSheet.create({
     gap: spacing.md,
   } satisfies ViewStyle,
   emptyTitle: {
-    ...typography.subtitle,
+    ...typography.heading,
     color: colors.textSecondary,
   } satisfies TextStyle,
   emptySubtitle: {
-    ...typography.bodySm,
-    color: colors.textTertiary,
+    ...typography.label,
+    color: colors.surfaceMuted,
     textAlign: 'center',
   } satisfies TextStyle,
 });

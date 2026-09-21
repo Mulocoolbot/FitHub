@@ -16,8 +16,8 @@ import { colors, typography, spacing, radius, motion, touchTarget } from '../tok
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost';
-type ButtonSize = 'md' | 'lg';
+type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
+type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonProps {
   label: string;
@@ -77,7 +77,7 @@ export function Button({
       {loading ? (
         <ActivityIndicator
           size="small"
-          color={variant === 'primary' ? colors.textInverse : colors.accent}
+          color={variant === 'primary' ? colors.accent : colors.textPrimary}
         />
       ) : (
         <>
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: touchTarget.min,
-    borderRadius: radius.button,
+    borderRadius: radius.md,
   } satisfies ViewStyle,
   fullWidth: {
     width: '100%',
@@ -115,9 +115,12 @@ const styles = StyleSheet.create({
   label: {
     ...typography.body,
     fontWeight: '600',
+    fontFamily: 'Poppins-SemiBold',
   } satisfies TextStyle,
   labelLg: {
-    ...typography.subtitle,
+    ...typography.heading,
+    fontWeight: '600',
+    fontFamily: 'Poppins-SemiBold',
   } satisfies TextStyle,
   labelWithIcon: {
     marginLeft: spacing.sm,
@@ -125,6 +128,11 @@ const styles = StyleSheet.create({
 });
 
 const sizeStyles = StyleSheet.create({
+  sm: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    minHeight: 36,
+  } satisfies ViewStyle,
   md: {
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.md,
@@ -135,14 +143,22 @@ const sizeStyles = StyleSheet.create({
   } satisfies ViewStyle,
 });
 
+// Primary: white fill with black text (accent is #000 so we invert)
+// Secondary: outline with white border
+// Ghost: transparent with white text
 const variantStyles = StyleSheet.create({
   primary: {
-    backgroundColor: colors.accent,
+    backgroundColor: colors.textPrimary,
   } satisfies ViewStyle,
   secondary: {
     backgroundColor: 'transparent',
     borderWidth: 1.5,
-    borderColor: colors.border,
+    borderColor: colors.textSecondary,
+  } satisfies ViewStyle,
+  outline: {
+    backgroundColor: 'transparent',
+    borderWidth: 1.5,
+    borderColor: colors.textSecondary,
   } satisfies ViewStyle,
   ghost: {
     backgroundColor: 'transparent',
@@ -151,12 +167,15 @@ const variantStyles = StyleSheet.create({
 
 const variantLabelStyles = StyleSheet.create({
   primary: {
-    color: colors.textInverse,
+    color: colors.accent,
   } satisfies TextStyle,
   secondary: {
     color: colors.textPrimary,
   } satisfies TextStyle,
+  outline: {
+    color: colors.textPrimary,
+  } satisfies TextStyle,
   ghost: {
-    color: colors.accent,
+    color: colors.textPrimary,
   } satisfies TextStyle,
 });
