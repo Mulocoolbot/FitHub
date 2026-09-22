@@ -26,8 +26,27 @@ GoogleSignin.configure({
 /**
  * Sign in with Google OAuth (native, not browser redirect).
  *
- * Flow: native Google dialog → ID token + nonce → supabase.auth.signInWithIdToken()
+ * Flow: native Google dialog → ID token → supabase.auth.signInWithIdToken()
  * User never leaves the app.
+ *
+ * ─── NONCE NOT IMPLEMENTED ────────────────────────────────────────────
+ * Ideally, a random nonce should be generated (via expo-crypto), hashed
+ * (SHA-256), passed to GoogleSignin.signIn({ nonce: hashedNonce }), and
+ * the raw nonce sent to supabase.auth.signInWithIdToken({ nonce: rawNonce }).
+ * This binds the ID token to a single sign-in request, preventing replay
+ * attacks (standard OIDC practice).
+ *
+ * However, @react-native-google-signin/google-signin v14 does NOT expose
+ * a `nonce` parameter in its `SignInParams` type — only `loginHint` (iOS).
+ * Sending nonce to only one side (Google OR Supabase) causes a "Nonces
+ * mismatch" error. Therefore, nonce is intentionally omitted from BOTH
+ * sides until the library adds support.
+ *
+ * expo-crypto remains in package.json as a dependency, ready for use once
+ * a future version of the library supports custom nonce.
+ *
+ * Tracked as a known limitation in README.md → Key Decisions.
+ * ──────────────────────────────────────────────────────────────────────
  */
 export async function signInWithGoogle() {
   await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
